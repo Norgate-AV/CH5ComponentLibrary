@@ -122,5 +122,29 @@
     ], 
     "engines": {
         "node": ">=20.4.0"
+    },
+    "exports": {
+        ".": {
+            "import": "./build_bundles/lib-esm/index.js",
+            "require": "./build_bundles/amd/index.js",
+            "node": "./build_bundles/cjs/index.js",
+            "default": "./build_bundles/umd/index.js"
+        },
+        "./esm": {
+            "import": "./build_bundles/lib-esm/index.js",
+            "types": "./build_bundles/lib-esm/index.d.ts"
+        },
+        "./umd": {
+            "default": "./build_bundles/umd/index.js",
+            "types": "./build_bundles/umd/index.d.ts"
+        },
+        "./cjs": {
+            "node": "./build_bundles/cjs/index.js",
+            "types": "./build_bundles/cjs/index.d.ts"
+        },
+        "./amd": {
+            "require": "./build_bundles/amd/index.js",
+            "types": "./build_bundles/amd/index.d.ts"
+        }
     }
 }
