@@ -6,44 +6,50 @@
 // under which you licensed this source code.
 
 import { Ch5SignalFactory } from "./ch5-signal-factory";
-import isUndefined from 'lodash/isUndefined';
+import isUndefined from "lodash/isUndefined";
 
-export const version = !!process.env.BUILD_VERSION ? process.env.BUILD_VERSION : 'VERSION_NOT_SET'; // 'X.XX.XX.XX'
-export const buildDate = !!process.env.BUILD_DATE ? process.env.BUILD_DATE : 'BUILD_DATE_INVALID'; // 'YYYY-MM-DD'
+export const version = "2.8.0";
+//!!process.env.BUILD_VERSION ? process.env.BUILD_VERSION : 'VERSION_NOT_SET'; // 'X.XX.XX.XX'
+export const buildDate = "2024-02-29";
+//!!process.env.BUILD_DATE ? process.env.BUILD_DATE : 'BUILD_DATE_INVALID'; // 'YYYY-MM-DD'
 
-export const signalNameForLibraryVersion: string = 'Csig.library.ver';
-export const signalNameForLibraryBuildDate: string = 'Csig.library.date';
+export const signalNameForLibraryVersion: string = "Csig.library.ver";
+export const signalNameForLibraryBuildDate: string = "Csig.library.date";
 
 class Ch5Version {
+    public static init() {
+        Ch5Version.displayVersionMessage();
+        Ch5Version.initVersionSignals();
+    }
 
-	public static init() {
-		Ch5Version.displayVersionMessage();
-		Ch5Version.initVersionSignals()
-	}
+    public static displayVersionMessage() {
+        const message = `Crestron Component Library version ${version} build date ${buildDate}`;
+        console.log(message);
+    }
 
-	public static displayVersionMessage() {
-		const message = `Crestron Component Library version ${version} build date ${buildDate}`;
-		console.log(message);
-	}
+    public static initVersionSignals() {
+        const sigFactory = Ch5SignalFactory.getInstance();
+        const sigVer = sigFactory.getStringSignal(signalNameForLibraryVersion);
+        const sigBuildDate = sigFactory.getStringSignal(
+            signalNameForLibraryBuildDate
+        );
 
-	public static initVersionSignals() {
-		const sigFactory = Ch5SignalFactory.getInstance();
-		const sigVer = sigFactory.getStringSignal(signalNameForLibraryVersion);
-		const sigBuildDate = sigFactory.getStringSignal(signalNameForLibraryBuildDate);
+        if (null !== sigVer && !isUndefined(version)) {
+            sigVer.publish(version);
+        } else {
+            console.log(
+                "Error: unable to create signal containing library version"
+            );
+        }
 
-		if (null !== sigVer && !isUndefined(version)) {
-			sigVer.publish(version);
-		} else {
-			console.log('Error: unable to create signal containing library version');
-		}
-
-		if (null !== sigBuildDate && !isUndefined(buildDate)) {
-			sigBuildDate.publish(buildDate);
-		} else {
-			console.log('Error: unable to create signal containing library build date');
-		}
-	}
-
+        if (null !== sigBuildDate && !isUndefined(buildDate)) {
+            sigBuildDate.publish(buildDate);
+        } else {
+            console.log(
+                "Error: unable to create signal containing library build date"
+            );
+        }
+    }
 }
 
 Ch5Version.init();
