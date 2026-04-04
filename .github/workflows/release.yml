@@ -37,11 +37,15 @@ jobs:
 
       - name: Set build environment variables
         run: |
+          echo "IS_RELEASE=true" >> $GITHUB_ENV
           echo "BUILD_VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
           echo "BUILD_DATE=$(date -u +%Y-%m-%d)" >> $GITHUB_ENV
 
       - name: Build
         run: pnpm build:prod_publish
+
+      - name: Test exports
+        run: pnpm test:exports
 
       - name: Publish to npm
         run: pnpm publish --no-git-checks --provenance

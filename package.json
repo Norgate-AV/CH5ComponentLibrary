@@ -71,6 +71,7 @@
         "prebuild": "npm-run-all clean:*",
         "test:mocha": "npm-run-all clean:compiled && tsc -p tsconfig.umd.json --target ES6 && nyc mocha --reporter mochawesome --exit",
         "test:wct": "ws -o",
+        "test:exports": "vitest run tests/exports.test.ts",
         "wct:report": "echo '🚀 Starting server and opening test page...' && (ws > /dev/null 2>&1 &) && sleep 3 && open http://localhost:8000/wct_tests/run-all-with-report.html && echo '✅ Page opened! Wait for tests to complete, then click the green button to download report.'",
         "eslint": "eslint . --ext .ts"
     },
@@ -129,6 +130,7 @@
         "typedoc": "0.25.2",
         "typescript": "^6.0.0",
         "url-loader": "^4.1.1",
+        "vitest": "^4.1.2",
         "webpack": "^5.74.0",
         "webpack-cli": "^4.10.0",
         "webpack-merge": "^4.2.1",
