@@ -3,10 +3,11 @@
     "compilerOptions": {
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
-        "target": "es6",
-        "module": "es6",
+        "target": "ES2017",
+        "module": "ESNext",
         "outDir": "./build_bundles/esm",
-        "declarationDir": "./build_bundles/esm"
+        "declarationDir": "./build_bundles/esm",
+        "emitDeclarationOnly": true
     },
     "include": ["src/**/*.ts"]
 }

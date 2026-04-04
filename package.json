@@ -13,11 +13,17 @@
     "types": "build_bundles/umd/@types/index.d.ts",
     "main": "build_bundles/cjs/cr-com-lib.js",
     "module": "build_bundles/esm/index.js",
+    "sideEffects": true,
     "exports": {
         ".": {
-            "types": "./build_bundles/umd/@types/index.d.ts",
-            "import": "./build_bundles/esm/index.js",
-            "require": "./build_bundles/cjs/cr-com-lib.js",
+            "import": {
+                "types": "./build_bundles/esm/index.d.ts",
+                "default": "./build_bundles/esm/index.js"
+            },
+            "require": {
+                "types": "./build_bundles/umd/@types/index.d.ts",
+                "default": "./build_bundles/cjs/cr-com-lib.js"
+            },
             "default": "./build_bundles/umd/cr-com-lib.js"
         }
     },
@@ -31,7 +37,7 @@
         "build:dev:amd-no-ce": "cross-env NODE_ENV=dev MODULE_TYPE=amd NO_CE=1 webpack --progress --config=webpack.dev.config.js",
         "build:dev:cjs": "cross-env NODE_ENV=dev MODULE_TYPE=cjs webpack --progress --config=webpack.dev.config.js",
         "build:dev:cjs-no-ce": "cross-env NODE_ENV=dev MODULE_TYPE=cjs NO_CE=1 webpack --progress --config=webpack.dev.config.js",
-        "build:dev:esm": "cross-env NODE_ENV=dev MODULE_TYPE=esm tsc -p tsconfig.esm.json",
+        "build:dev:esm": "cross-env NODE_ENV=dev MODULE_TYPE=esm tsup && tsc -p tsconfig.esm.json",
         "build:dev:esm-no-ce": "cross-env NODE_ENV=dev MODULE_TYPE=esm NO_CE=1 tsc -p tsconfig.esm.json --outDir build_bundles/esm-no-ce --declarationDir build_bundles/esm-no-ce",
         "build:dev:umd": "cross-env NODE_ENV=dev MODULE_TYPE=umd webpack --progress --config=webpack.dev.config.js",
         "build:dev:umd-no-ce": "cross-env NODE_ENV=dev MODULE_TYPE=umd NO_CE=1 webpack --progress --config=webpack.dev.config.js",
@@ -41,7 +47,7 @@
         "build:prod:amd-no-ce": "cross-env NODE_ENV=prod MODULE_TYPE=amd NO_CE=1 webpack --progress --config=webpack.prod.config.js",
         "build:prod:cjs": "cross-env NODE_ENV=prod MODULE_TYPE=cjs webpack --progress --config=webpack.prod.config.js",
         "build:prod:cjs-no-ce": "cross-env NODE_ENV=prod MODULE_TYPE=cjs NO_CE=1 webpack --progress --config=webpack.prod.config.js",
-        "build:prod:esm": "cross-env NODE_ENV=prod MODULE_TYPE=esm tsc -p tsconfig.esm.json",
+        "build:prod:esm": "cross-env NODE_ENV=prod MODULE_TYPE=esm tsup && tsc -p tsconfig.esm.json",
         "build:prod:esm-no-ce": "cross-env NODE_ENV=prod MODULE_TYPE=esm NO_CE=1 tsc -p tsconfig.esm.json --outDir build_bundles/esm-no-ce --declarationDir build_bundles/esm-no-ce",
         "build:prod:umd": "cross-env NODE_ENV=prod MODULE_TYPE=umd webpack --progress --config=webpack.prod.config.js",
         "build:prod:umd-no-ce": "cross-env NODE_ENV=prod MODULE_TYPE=umd NO_CE=1 webpack --progress --config=webpack.prod.config.js",
@@ -106,6 +112,7 @@
         "copy-webpack-plugin": "11.0.0",
         "copyfiles": "^2.4.1",
         "cross-env": "^7.0.3",
+        "dotenv": "^17.4.0",
         "dotenv-webpack": "^7.1.0",
         "eslint": "^8.49.0",
         "jsdom": "^16.7.0",
@@ -116,7 +123,9 @@
         "npm-run-all": "^4.1.5",
         "nyc": "^15.1.0",
         "rimraf": "^3.0.2",
+        "terser": "^5.46.1",
         "ts-loader": "4.3.0",
+        "tsup": "^8.5.1",
         "typedoc": "0.25.2",
         "typescript": "^5.1.6",
         "url-loader": "^4.1.1",
