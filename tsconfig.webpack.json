@@ -1,7 +1,6 @@
 {
     "extends": "./tsconfig.cjs",
     "compilerOptions": {
-        "ignoreDeprecations": "6.0",
         "module": "commonjs",
         "outDir": null,
         "declarationDir": "./@types"
