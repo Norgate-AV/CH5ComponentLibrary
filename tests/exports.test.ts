@@ -80,6 +80,7 @@ describe("package exports", () => {
         const exportPaths = extractPaths(pkg.exports).map((p) =>
             p.replace(/^\.\//, ""),
         );
+
         for (const p of exportPaths) {
             it(p, () => {
                 expect(existsSync(p), `Missing export path: ${p}`).toBe(true);
@@ -101,5 +102,73 @@ describe("package exports", () => {
     it("ESM type declaration is non-empty", () => {
         const { size } = statSync("build_bundles/esm/index.d.ts");
         expect(size).toBeGreaterThan(0);
+    });
+
+    describe("ESM bundle contains key named exports", () => {
+        const keyExports = [
+            // Signal API
+            "publishEvent",
+            "subscribeState",
+            "unsubscribeState",
+            // Native bridge — one per signal type (digital, analog, serial, object)
+            "bridgeReceiveBooleanFromNative",
+            "bridgeReceiveIntegerFromNative",
+            "bridgeReceiveStringFromNative",
+            "bridgeReceiveObjectFromNative",
+            // Device detection
+            "isCrestronTouchscreen",
+            // Utilities
+            "uriSchemaValidation",
+            // Key classes
+            "Ch5Button",
+            "Ch5Signal",
+            "Ch5SignalFactory",
+            // Build metadata
+            "version",
+            "buildDate",
+        ];
+
+        const content = readFileSync("build_bundles/esm/index.js", "utf8");
+
+        for (const name of keyExports) {
+            it(name, () => {
+                expect(content, `Missing export: ${name}`).toContain(name);
+            });
+        }
+    });
+
+    describe("ESM type declaration contains key type definitions", () => {
+        const keyModules = [
+            "./ch5-button/index",
+            "./ch5-core/index",
+            "./ch5-signal-level-gauge/index",
+        ];
+
+        const content = readFileSync("build_bundles/esm/index.d.ts", "utf8");
+
+        for (const name of keyModules) {
+            it(`re-exports ${name}`, () => {
+                expect(content, `Missing re-export: ${name}`).toContain(name);
+            });
+        }
+    });
+
+    describe("package.json has required npm metadata", () => {
+        const requiredFields = [
+            "name",
+            "version",
+            "description",
+            "license",
+            "repository",
+        ] as const;
+
+        for (const field of requiredFields) {
+            it(`has "${field}" field`, () => {
+                expect(
+                    pkg[field],
+                    `Missing required package.json field: ${field}`,
+                ).toBeTruthy();
+            });
+        }
     });
 });
